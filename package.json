@@ -1,0 +1,28 @@
+{
+  "name": "pruebatecnica_alejandro_villar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elcurras/PruebaTecnica_Alejandro_Villar.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elcurras/PruebaTecnica_Alejandro_Villar/issues"
+  },
+  "homepage": "https://github.com/elcurras/PruebaTecnica_Alejandro_Villar#readme",
+  "dependencies": {
+    "body-parser": "^2.2.1",
+    "express": "^5.1.0",
+    "mariadb": "^3.4.5",
+    "morgan": "^1.10.1",
+    "sequelize": "^6.37.7",
+    "winston": "^3.18.3"
+  }
+}
