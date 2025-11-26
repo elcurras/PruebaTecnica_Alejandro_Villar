@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Procesando Reclamación...</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
+      :root {
+        font-family: 'JetBrains Mono', monospace;
+        background-color: #242424;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .loader-container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+      }
+
+      p.text {
+        color: whitesmoke;
+        font-size: 4rem;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+      }
+
+      svg {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) rotate(-90deg); /* Rotamos para que empiece desde arriba */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loader-container">
+      <svg
+        width="300"
+        height="300"
+        id="Layer_1"
+        data-name="Layer 1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 204 204"
+      >
+        <defs>
+          <style>
+            .cls-1 {
+              fill: none;
+              stroke: #F40009; /* Usamos el rojo corporativo */
+              stroke-miterlimit: 10;
+              stroke-width: 4px;
+            }
+          </style>
+        </defs>
+        <path
+          class="cls-1"
+          d="m2,102c0,82.11,17.89,100,100,100,82.11,0,100-17.89,100-100,0-82.11-17.89-100-100-100C19.89,2,2,19.89,2,102Z"
+        />
+      </svg>
+      <p class="text">0%</p>
+    </div>
+
+    <!-- Scripts de GSAP (GreenSock Animation Platform) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- No necesitamos DrawSVGPlugin, lo eliminamos -->
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const claimFormDataString = sessionStorage.getItem('claimFormData');
+        let formDataToSend = null;
+
+        if (claimFormDataString) {
+          formDataToSend = JSON.parse(claimFormDataString);
+          sessionStorage.removeItem('claimFormData'); // Limpiamos los datos una vez recuperados
+        }
+        
+        // 1. Iniciar la animación
+        const animationDuration = 3; // Duración mínima de la animación en segundos
+        const path = document.querySelector('.cls-1');
+        const length = path.getTotalLength();
+
+        // Preparamos el SVG para la animación de dibujado
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+
+        // Creamos la promesa de la animación
+        const obj = { v: 0 };
+        const animationPromise = new Promise(resolve => {
+          const tl = gsap.timeline({ onComplete: resolve }); // Usamos un timeline para sincronizar
+
+          // Animamos el dibujado del círculo
+          tl.to(path, {
+            strokeDashoffset: 0,
+            duration: animationDuration,
+            ease: 'power1.inOut'
+          });
+
+          // Animamos el contador de porcentaje al mismo tiempo
+          tl.to(obj, {
+            v: 100,
+            duration: animationDuration,
+            ease: 'power1.inOut',
+            onUpdate: () => {
+              document.querySelector('p.text').textContent = Math.round(obj.v) + '%';
+            }
+          }, 0); // El '0' al final hace que esta animación empiece al mismo tiempo que la anterior
+        });
+
+        // 2. Enviar los datos al servidor si existen
+        let fetchPromise;
+        if (formDataToSend) {
+          fetchPromise = fetch('/api/claims', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json' // Enviamos como JSON
+            },
+            body: JSON.stringify(formDataToSend)
+          });
+        } else {
+          // Si no hay datos, es un acceso directo al loader, lo tratamos como un error o redirigimos
+          fetchPromise = Promise.resolve({ ok: false, status: 400, message: 'No form data found.' });
+        }
+
+        // 3. Esperar a que la animación y la petición de red terminen
+        Promise.all([fetchPromise, animationPromise])
+          .then(([response]) => {
+            if (response.ok) {
+              window.location.href = '/index.html'; // Éxito: redirigir a la lista
+            } else {
+              // Error: redirigir al formulario con un posible mensaje de error
+              alert('Error al guardar la reclamación. Por favor, inténtalo de nuevo.');
+              window.location.href = '/formulario.html';
+            }
+          })
+          .catch(error => {
+            console.error('Error durante el proceso de envío:', error);
+            alert('Ocurrió un error inesperado. Por favor, inténtalo de nuevo.');
+            window.location.href = '/formulario.html';
+          });
+      });
+    </script>
+  </body>
+</html>

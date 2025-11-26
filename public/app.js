@@ -22,18 +22,21 @@ function handleFormSubmit() {
     form.addEventListener('submit', async (event) => {
         event.preventDefault(); //Evitamos que el formulario se envíe de la forma tradicional
 
-        const formData = new FormData(form);
-        const response = await fetch('/api/claims', { method: 'POST', body: new URLSearchParams(formData) });
-
-        if (response.ok) {
-            alert('¡Reclamación enviada con éxito!');
-            // Después de enviar, redirigimos al usuario a la lista para que vea el nuevo registro
-            window.location.href = '/index.html';
-        } else {
-            alert('Error al guardar la reclamación.');
+          const formData = new FormData(form);
+        const data = {};
+        // Convertimos FormData a un objeto plano para poder guardarlo en sessionStorage
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
         }
+        
+        // Guardamos los datos del formulario en sessionStorage para que loader.html los pueda usar
+        sessionStorage.setItem('claimFormData', JSON.stringify(data));
+        
+        // Redirigimos inmediatamente a la página del loader
+        window.location.href = '/loader.html';
     });
 }
+
 
 //Función para cargar y mostrar las reclamaciones en la tabla
 async function loadClaims() {
