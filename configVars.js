@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     db: {
         name: 'db1',
         username: 'remoto',

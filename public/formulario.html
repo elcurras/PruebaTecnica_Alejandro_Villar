@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Reclamación</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            max-width: 700px; 
+            margin: auto; 
+            padding: 20px; 
+            background-color: #f8f9fa; /* Fondo gris muy claro */
+            color: #212529; /* Texto oscuro */
+        }
+        h1 { color: #F40009; border-bottom: 2px solid #F40009; padding-bottom: 10px; }
+        form div { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select, textarea { 
+            width: 100%; padding: 10px; box-sizing: border-box; 
+            background-color: #FFFFFF; color: #212529; border: 1px solid #ced4da; border-radius: 5px;
+        }
+        textarea { min-height: 100px; }
+        .buttons { display: flex; justify-content: space-between; }
+        button { padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; transition: opacity 0.2s; }
+        button:hover { opacity: 0.85; }
+        button[type="submit"] { background-color: #F40009; color: white; } /* Rojo Coca-Cola */
+        button[type="button"] { background-color: #6c757d; color: white; } /* Gris para cancelar */
+    </style>
+</head>
+<body>
+    <h1>Nueva Reclamación</h1>
+    <!-- El action ahora apunta a la ruta de la API -->
+    <form action="/api/claims" method="POST" id="claimForm">
+        <div>
+            <label for="email">Email (opcional)</label>
+            <input type="email" id="email" name="email">
+        </div>
+        <div>
+            <label for="relationship">Relación con la organización</label>
+            <select id="relationship" name="relationship" required>
+                <option value="Internal">Interno</option>
+                <option value="External">Externo</option>
+            </select>
+        </div>
+        <div>
+            <label for="behaviourType">Tipo de comportamiento</label>
+            <select id="behaviourType" name="behaviourType" required>
+                <option value="Procurement">Adquisiciones</option>
+                <option value="Transport safety">Seguridad en el transporte</option>
+                <option value="Financial">Financiero</option>
+            </select>
+        </div>
+        <div>
+            <label for="details">Detalles</label>
+            <textarea id="details" name="details" minlength="20" required></textarea>
+        </div>
+        <div>
+            <label for="breachDate">Fecha de la infracción</label>
+            <input type="date" id="breachDate" name="breachDate" required>
+        </div>
+        <div class="buttons">
+            <button type="submit">Enviar</button>
+            <button type="button" onclick="window.location.href='/index.html'">Cancelar</button>
+        </div>
+    </form>
+
+    <!-- Incluimos nuestro script para manejar el envío del formulario -->
+    <script src="/app.js"></script>
+</body>
+</html>

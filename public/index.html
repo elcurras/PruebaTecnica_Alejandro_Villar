@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Reclamaciones</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            max-width: 950px; 
+            margin: auto; 
+            padding: 20px; 
+            background-color: #f8f9fa; /* Fondo gris muy claro */
+            color: #212529; /* Texto oscuro */
+        }
+        h1 { color: #F40009; border-bottom: 2px solid #F40009; padding-bottom: 10px; } /* Rojo Coca-Cola */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px 15px; text-align: left; border: none; }
+        th { 
+            background-color: #343a40; /* Gris oscuro y neutro */
+            color: #FFFFFF; /* Texto blanco */
+            font-size: 1.1em; 
+            text-align: center; /* Títulos centrados */
+        }
+        tr { border-bottom: 1px solid #dee2e6; } /* Líneas de separación claras */
+        tr:last-of-type { border-bottom: none; } /* Sin línea en la última fila */
+        a.button, button.action { text-decoration: none; color: white; padding: 6px 12px; border-radius: 5px; border: none; cursor: pointer; font-size: 0.9em; transition: opacity 0.2s; }
+        a.button, button.action:hover { opacity: 0.85; }
+        a.button { background-color: #F40009; } /* Rojo Coca-Cola */
+        button.complete { background-color: #28a745; }
+        button.delete { background-color: #dc3545; }
+        tr.completed { background-color: #FFFFFF; color: #6c757d; text-decoration: line-through; } /* Estilo de fila completada */
+        td:last-child { display: flex; gap: 8px; justify-content: center; } /* Centra los botones en su celda */
+    </style>
+</head>
+<body>
+    <h1>Listado de Reclamaciones</h1>
+    <a class="button" href="/formulario.html">Añadir Nueva Reclamación</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Relación</th>
+                <th>Tipo de Comportamiento</th>
+                <th>Fecha Infracción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <!-- El cuerpo de la tabla se llenará dinámicamente -->
+        <tbody id="claims-table-body">
+            <tr>
+                <td colspan="5">Cargando reclamaciones...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Incluimos nuestro script para cargar los datos -->
+    <script src="/app.js"></script>
+</body>
+</html>

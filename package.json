@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/elcurras/PruebaTecnica_Alejandro_Villar#readme",
   "dependencies": {
-    "body-parser": "^2.2.1",
     "express": "^5.1.0",
     "mariadb": "^3.4.5",
     "morgan": "^1.10.1",
